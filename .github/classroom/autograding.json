@@ -2,6 +2,7 @@
   "tests": [
     {
       "name": "Test 01",
+      "setup": "pip3 install pandas",
       "run": "python3 tests.py 01",
       "input": "",
       "output": "",
@@ -11,6 +12,7 @@
     },
     {
       "name": "Test 02",
+      "setup": "pip3 install pandas",
       "run": "python3 tests.py 02",
       "input": "",
       "output": "",
@@ -20,6 +22,7 @@
     },
     {
       "name": "Test 03",
+      "setup": "pip3 install pandas",
       "run": "python3 tests.py 03",
       "input": "",
       "output": "",
@@ -29,6 +32,7 @@
     },
     {
       "name": "Test 04",
+      "setup": "pip3 install pandas",
       "run": "python3 tests.py 04",
       "input": "",
       "output": "",
