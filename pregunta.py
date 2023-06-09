@@ -10,34 +10,50 @@ espacio entre palabra y palabra.
 
 """
 import pandas as pd
-import re
 
 
 def ingest_data():
 
-    i = 0
-    dict1 = {}
-    df = pd.DataFrame()
-    with open('./clusters_report.txt') as f:
-        for line in f:
-            
+    #
+    # Inserte su código aquí
+    #
+    fileName = "clusters_report.txt"
+    file = open(fileName, "r")
+    lineas = file.readlines()
+    file.close()
+    columnas = [i.strip().lower().replace(' ', '_') for i in lineas[0].strip().split('  ')]
+    columnas.remove('')
+    cluster = []
+    numeroPalabras = []
+    porcentaje = []
+    principales = []
+    for i in range(len(columnas)):
+        if i==1 or i==2:
+            columnas[i] = columnas[i] + '_palabras_clave'
+    del lineas[:4]
 
-            line = re.sub(r"\s+", " ", line)
-            if len(line)>1 and i > 3:
-                if line.split()[0].isnumeric() == True:
-                    try: 
-                        dict1['principales_palabras_clave'] = ' '.join(dict1['principales_palabras_clave'])
-                        df = df.append(dict1, ignore_index=True)
-                    except: pass
-                    dict1 = {'cluster': int(line.split()[0]),
-                                'cantidad_de_palabras_clave': int(line.split()[1]),
-                                'porcentaje_de_palabras_clave': float(line.split()[2].replace(',','.')),
-                                'principales_palabras_clave': line.split()[4:]}
-                else: 
-                    dict1['principales_palabras_clave'].append(' '.join(line.split()))
-            i += 1
-    dict1['principales_palabras_clave'] = ' '.join(dict1['principales_palabras_clave'])
-    df = df.append(dict1, ignore_index=True)
-    df['principales_palabras_clave'] = df['principales_palabras_clave'].str.rstrip('\.')
+    parrafo = 1
+    palabras = []
+    for line in lineas:
+        values = [item for item in line.split('  ') if item != '']
+        if values == ['\n'] or values == [' \n']:
+            parrafo = 1
+            principales.append(" ".join(palabras))
+            palabras = []
+            continue
+        if parrafo == 1:
+            cluster.append(int(values.pop(0).strip()))
+            numeroPalabras.append(int(values.pop(0).strip()))
+            porcentaje.append(float(values.pop(0)[:-2].strip().replace(",", ".")))
+        values = [i.strip().replace(".", "") for i in values]
+        palabras.append(" ".join(values))
+        parrafo += 1
+    data = {
+        columnas[0]: cluster,
+        columnas[1]: numeroPalabras,
+        columnas[2]: porcentaje,
+        columnas[3]: principales
+    }
+    resultado = pd.DataFrame(data)
 
-    return df
+    return resultado
